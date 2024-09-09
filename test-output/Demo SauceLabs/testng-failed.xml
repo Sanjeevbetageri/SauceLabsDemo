@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Demo SauceLabs]" guice-stage="DEVELOPMENT">
+  <listeners>
+    <listener class-name="demo.sauceLabs.pom.listeners.ListenerClass"/>
+  </listeners>
+  <test thread-count="5" name="Demo Tests for SauceLabs(failed)">
+    <parameter name="browser" value="CHROME"/>
+    <classes>
+      <class name="demo.sauceLabs.pom.tests.HomePageTests">
+        <methods>
+          <include name="addToCart"/>
+          <include name="startDriver"/>
+          <include name="startDriverInit"/>
+          <include name="afterSuite"/>
+          <include name="tearDown"/>
+        </methods>
+      </class> <!-- demo.sauceLabs.pom.tests.HomePageTests -->
+    </classes>
+  </test> <!-- Demo Tests for SauceLabs(failed) -->
+</suite> <!-- Failed suite [Demo SauceLabs] -->
