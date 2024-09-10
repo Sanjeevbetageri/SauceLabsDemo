@@ -31,15 +31,17 @@ public class LoginPage extends BasePage{
 	private WebElement lbl_products;
 	
 	
-	
+	/* Verify whether Login Page is loaded */
 	public boolean waitForLoginPageToLoad() {
 		return waitForElementDisplayed(txtBox_userName);
 	}
 
+	/* Login to application with credentials defined in properties file */
 	public boolean loginToApplication() {
 		waitAndSend(txtBox_userName, ConfigLoader.getConfig().getUserName());
 		waitAndSend(txtBox_password, ConfigLoader.getConfig().getPassword());
 		waitAndJsClick(btn_login);
+		waitFor(2);
 		return waitForElementDisplayed(lbl_products);
 	}
 }

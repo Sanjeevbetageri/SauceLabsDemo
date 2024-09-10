@@ -17,12 +17,15 @@ public class CartPage extends BasePage{
 		PageFactory.initElements(driver, this);
 	}
 	
+	/* Locators */
+	
 	@FindBy(xpath = "//button[text()='Checkout']")
 	private WebElement btn_checkOut;
 	
 	@FindBy(xpath = "//span[text()='Checkout: Your Information']")
 	private WebElement lbl_AddressPage;
 	
+	/* This method verifies whether all the items added previously are present in the Cart Page */
 	public boolean verifyItemsInCart(String items) {
 		ArrayList<Boolean> status = new ArrayList<Boolean>();
 		for(String item: getAsList(items)) {
@@ -32,7 +35,8 @@ public class CartPage extends BasePage{
 		return !status.contains(false);
 	}
 
-	public HashMap<String, String> captureItemPrice(String items) {
+	/* This method captures the item prices in Cart Page */
+	public HashMap<String, String> captureItemPriceInCartPage(String items) {
 		HashMap<String, String> pricesInCartPage = new HashMap<String, String>();
 		for(String item:getAsList(items)) {
 			if(isElementDisplayed("//div[text()='"+item+"']")) {
@@ -43,8 +47,10 @@ public class CartPage extends BasePage{
 		return pricesInCartPage;
 	}
 	
+	/* This method navigates to Address Details Page and verifies if user lands on Address Page */
 	public boolean navigateToAddressPage() {
 		btn_checkOut.click();
+		waitFor(2);
 		return isElementDisplayed(lbl_AddressPage);
 	}
 }

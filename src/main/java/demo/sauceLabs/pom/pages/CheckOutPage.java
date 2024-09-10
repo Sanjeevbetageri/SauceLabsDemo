@@ -20,6 +20,7 @@ public class CheckOutPage extends BasePage{
 		PageFactory.initElements(driver, this);
 	}
 	
+	/* Locators */
 	@FindBy(xpath = "//div[@class='inventory_item_name']")
 	private List<WebElement> lbl_item;
 	
@@ -41,25 +42,21 @@ public class CheckOutPage extends BasePage{
 	
 	HashMap<String, String> priceInCheckOutPage = new HashMap<String, String>();
 	
-	public HashMap<String, String> validateItems() {
+	/* This method captures the items and their price present on Checkout Page */
+	public HashMap<String, String> captureItemsAndPrices() {
 		for(int i = 0; i < lbl_item.size(); i++) {
 			priceInCheckOutPage.put(getElementText(lbl_item.get(i)),getElementText(lbl_price.get(i)).replace("$", ""));
 		}
 		return priceInCheckOutPage;
 	}
 	
-	public boolean validatePrice(HashMap<String, String> priceInHomePage) {
-		return areEqual(priceInHomePage, validateItems());
+	/* This method checks the items and prices presented in Checkout page against Home Page values */
+	public boolean validateItemsAndPrice(HashMap<String, String> priceInHomePage) {
+		return areEqual(priceInHomePage, captureItemsAndPrices());
 	}
 	
-	public boolean validateTotalPrice() {
-		System.out.println(lbl_subTotalPrice.getText());
-		System.out.println(lbl_Tax.getText());
-		System.out.println(lbl_TotalPrice.getText());
-		return true;
-	}
-	
-	public boolean validateSubTotal() {
+	/* Validate various price components */
+	public boolean validateCalculatedPrices() {
 		float subTotal = 0;
 		float Tax;
 		float Total;
@@ -72,9 +69,16 @@ public class CheckOutPage extends BasePage{
 		return Total == subTotal + Tax ;
 	}
 	
+	/* Navigate to Order Confirmation Page and validate if user lands on the Page */
 	public boolean navigateToOrderConfirmPage() {
 		btn_Finish.click();
+		waitFor(2);
 		return isElementDisplayed("//span[text()='Checkout: Complete!']");
+	}
+	
+	/* Verify the Communication details are present in Checkout Page */
+	public boolean verifyAddressInCheckoutPage() {
+		return isElementDisplayed("//*[contains(text(),'Sanjeev')]");
 	}
 
 }
