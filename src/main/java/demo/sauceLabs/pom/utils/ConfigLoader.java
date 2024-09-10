@@ -69,4 +69,16 @@ public class ConfigLoader {
 	public String getItems(){
 		return getPropertyValue("Items");		
 	}
+	
+	public String getFirstName(){
+		return getPropertyValue("FirstName");		
+	}
+	
+	public String getLastName(){
+		return getPropertyValue("LastName");		
+	}
+	
+	public String getZIP(){
+		return getPropertyValue("ZIP");		
+	}
 }

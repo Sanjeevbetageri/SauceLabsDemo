@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.aventstack.extentreports.model.SystemEnvInfo;
+
 import demo.sauceLabs.pom.reports.ExtentLogger;
 import demo.sauceLabs.pom.utils.ConfigLoader;
 
@@ -145,6 +147,14 @@ public class BasePage {
 			Items.add(item);
 		}
 		return Items;
+	}
+	
+	public void waitFor(int sec) {
+		try {
+			Thread.sleep(sec * 1000);
+		} catch(Exception e) {
+			System.out.println("waitFor() failed with "+ e);
+		}
 	}
 	
 }

@@ -98,4 +98,13 @@ public class BaseTest {
 		}
 		return status;
 	}
+	
+	public Boolean softAssertStatusReportLog(Boolean status, String passMessage, String failMessage) {
+		if(status) {
+			ExtentLogger.pass(passMessage);
+		} else {
+			ExtentLogger.fail(failMessage, true);
+		}
+		return status;
+	}
 }

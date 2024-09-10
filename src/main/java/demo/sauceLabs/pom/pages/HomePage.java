@@ -14,13 +14,14 @@ import demo.sauceLabs.pom.base.BasePage;
 
 public class HomePage extends BasePage{
 	
-	//ArrayList<String> itemsToBeAdded = new ArrayList<String>(Arrays.asList("A","B"));
 	HashMap<String, String> item_price = new HashMap<String, String>();
 
 	public HomePage(WebDriver driver) {
 		super(driver);
 		PageFactory.initElements(driver, this);
 	}
+	
+	/* Locators */
 	
 	@FindBy(xpath="//a[@data-test='shopping-cart-link']")
 	private WebElement lnk_Cart;
@@ -31,6 +32,8 @@ public class HomePage extends BasePage{
 	@FindBy(xpath="//span[text()='Your Cart']")
 	private WebElement lbl_yourCart;
 	
+	/* This method adds all the configured items to the cart. Returns true if all the items are added and Cart icon is updated.
+	 * This will fail if any product is not present in the page */
 	public boolean addItemsToCart(String itemsToBeAdded) {
 		for(String item: getAsList(itemsToBeAdded)) {
 			if(isElementDisplayed("//div[text()='"+item+"']/../../following-sibling::div//button")) {
@@ -43,7 +46,8 @@ public class HomePage extends BasePage{
 		return isElementDisplayed(lnk_CartWithItems);
 	}
 	
-	public HashMap<String, String> capturePrice(String itemName) {
+	/* This method captures the prices of items configured in a HashMap */
+	public HashMap<String, String> captureItemAndPrice(String itemName) {
 		for(String item: getAsList(itemName)) {
 		String locatorItemPrice = "//div[text()='"+item+"']/../../following-sibling::div//div";
 		String price = getElementText(locatorItemPrice).replace("$", "");
@@ -52,9 +56,10 @@ public class HomePage extends BasePage{
 		return item_price;
 	}
 	
-	public boolean navigateToCart() throws InterruptedException {
+	/* This method will navigate to Cart Page and verifies if user lands on Cart Page */
+	public boolean navigateToCartPage() {
 		waitAndJsClick(lnk_Cart);
-		Thread.sleep(3000);
+		waitFor(2);
 		return isElementDisplayed(lbl_yourCart);
 	}
 

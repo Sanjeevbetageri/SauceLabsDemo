@@ -4,7 +4,7 @@
 <listeners>
 <listener class-name="demo.sauceLabs.pom.listeners.ListenerClass"></listener>
 </listeners>
-   <test name="Demo Tests for SauceLabs">
+   <test name="Demo Tests for SauceLabs" thread-count="4" parallel="methods">
       <parameter name="browser" value="CHROME" />
       <classes>
          <class name="demo.sauceLabs.pom.tests.OrderPlaceTests" />

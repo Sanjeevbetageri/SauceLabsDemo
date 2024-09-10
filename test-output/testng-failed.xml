@@ -7,7 +7,7 @@
   <test thread-count="5" name="Demo Tests for SauceLabs(failed)">
     <parameter name="browser" value="CHROME"/>
     <classes>
-      <class name="demo.sauceLabs.pom.tests.HomePageTests">
+      <class name="demo.sauceLabs.pom.tests.OrderPlaceTests">
         <methods>
           <include name="addToCart"/>
           <include name="startDriver"/>
@@ -15,7 +15,7 @@
           <include name="afterSuite"/>
           <include name="tearDown"/>
         </methods>
-      </class> <!-- demo.sauceLabs.pom.tests.HomePageTests -->
+      </class> <!-- demo.sauceLabs.pom.tests.OrderPlaceTests -->
     </classes>
   </test> <!-- Demo Tests for SauceLabs(failed) -->
 </suite> <!-- Failed suite [Demo SauceLabs] -->

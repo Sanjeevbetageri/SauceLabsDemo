@@ -1,6 +1,5 @@
 package demo.sauceLabs.pom.tests;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -18,7 +17,7 @@ import demo.sauceLabs.pom.pages.OrderConfirmationPage;
 import demo.sauceLabs.pom.reports.ExtentLogger;
 import demo.sauceLabs.pom.utils.ConfigLoader;
 
-public class HomePageTests extends BaseTest{
+public class OrderFlowTests extends BaseTest{
 
 	@Test(description = "Verify that user can Add Items to Cart, Enter Address Details and Place Order")
 	public void addToCart() throws InterruptedException {
@@ -31,49 +30,70 @@ public class HomePageTests extends BaseTest{
 		OrderConfirmationPage orderConfirmationPage = new OrderConfirmationPage(getDriver());
 		HashMap<String, String> priceInHomePage = new HashMap<String, String>();
 		HashMap<String, String> priceInCartPage = new HashMap<String, String>();
-		ArrayList<String> Items = new ArrayList<>(Arrays.asList("Sauce Labs Bolt T-Shirt","Test.allTheThings() T-Shirt (Red)"));
 		String items = ConfigLoader.getConfig().getItems();
+		SoftAssert softAssert = new SoftAssert();
 		
+		/* Login to Application */
 		status = loginPage.loginToApplication();
 		Assert.assertEquals(status, true);
 		validateStatusReportLog(status, "Logged in to App successfully", "Unable to login");
 		
+		/* Add the items to cart */
 		status = homePage.addItemsToCart(items);
 		Assert.assertEquals(status, true);
 		validateStatusReportLog(status, "Items Added to Cart", "Unable to add Items to the Cart");
 		
-		priceInHomePage = homePage.capturePrice(items);
-		System.out.println("Home "+priceInHomePage);
+		/* Capture Item and Price from Home Page */
+		priceInHomePage = homePage.captureItemAndPrice(items);
 		
-		status = homePage.navigateToCart();
+		/* Navigate to Cart Page */
+		status = homePage.navigateToCartPage();
 		validateStatusReportLog(status, "Navigated to Cart Page", "Unable to navigate to Carts Page");
 		
+		/* Verify the items present in Cart Page match the items added in Home Page */
 		cartPage.verifyItemsInCart(items);
 		validateStatusReportLog(status, "Verified the Added Items are present in Cart Page", "Items added to Cart are absent in the Cart Page");
 		
-		priceInCartPage = cartPage.captureItemPrice(items);
-		
-		System.out.println("Cart "+priceInCartPage);
+		/* Capture the prices in Cart Page */
+		priceInCartPage = cartPage.captureItemPriceInCartPage(items);
 
+		/* Verify the price of items in Cart matches the price in Home Page */
 		status = cartPage.areEqual(priceInHomePage, priceInCartPage);
-		validateStatusReportLog(status, "Verified the item price in Cart matches price in Home page", "Item prices in Cart do not match the price in Home Page");
+		validateStatusReportLog(status, "Verified the items and item price in Cart matches price in Home page", "Item and item prices in Cart do not match the price in Home Page");
 		
+		/* Navigate to Address Page */
 		status = cartPage.navigateToAddressPage();
 		validateStatusReportLog(status, "Navigated to Address Page", "Unable to navigate to Address Page");
 		
+		/* Verify that Address fields are Mandatory */
+		status = addressPage.validateMandatoryFields();
+		validateStatusReportLog(status, "Address fields are Mandatory", "Address Fields are not Mandatory");
+		
+		/* Enter address details and navigate to Checkout Page */
 		status = addressPage.enterAddress();
 		validateStatusReportLog(status, "Added Address and Navigated to Checkout Page", "Unable to navigate to Checkout Page");
 		
-		status = checkOutPage.validatePrice(priceInHomePage);
-		validateStatusReportLog(status, "Verified the item price in Checkout page matches price in Home page", "Item prices in Checkout page do not match the price in Home Page");
+		/* Verify the items and prices in Checkout page matches the details in Home Page */
+		status = checkOutPage.validateItemsAndPrice(priceInHomePage);
+		validateStatusReportLog(status, "Verified the items and item price in Checkout page matches price in Home page", "Items and Item prices in Checkout page do not match the price in Home Page");
 		
-		status = checkOutPage.validateSubTotal();
+		/* Verify the Communication details are present in Checkout Page */
+		status = checkOutPage.verifyAddressInCheckoutPage();
+		softAssert.assertEquals(status, false);
+		softAssertStatusReportLog(status,"Address details present in Checkout Page","Address details not present in Checkout Page");
+		
+		/* Verify the subTotal and Total price are calculated correctly */
+		status = checkOutPage.validateCalculatedPrices();
 		validateStatusReportLog(status, "Verified that Total price is calculated correctly", "Total Price presented on the CheckOut Page is incorrect");
 		
+		/* Navigate to Order Confirmation Page */
 		status = checkOutPage.navigateToOrderConfirmPage();
 		validateStatusReportLog(status, "Navigated to Order Confirmation Page", "Unable to navigate to Confirmation Page");
 		
+		/* Verify that order confirmation message is presented */
 		status = orderConfirmationPage.validateOrderConfirmation();
 		validateStatusReportLog(status, "Verified that order confirmation message is displayed", "Order confirmation message is not displayed");
+	
+		softAssert.assertAll();
 	}
 }

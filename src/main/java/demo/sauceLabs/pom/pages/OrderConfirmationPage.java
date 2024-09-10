@@ -14,9 +14,12 @@ public class OrderConfirmationPage extends BasePage {
 		PageFactory.initElements(driver, this);
 	}
 	
+	/* Locators */
+	
 	@FindBy(xpath = "//h2[text()='Thank you for your order!']")
 	private WebElement lbl_confirmMessage;
 	
+	/* This method verifies whether order confirmation message is presented to the user */
 	public boolean validateOrderConfirmation() {
 		return isElementDisplayed(lbl_confirmMessage);
 	}
